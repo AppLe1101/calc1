@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', function(){
     var form = document.querySelector('.calc');
     form.addEventListener('submit', function(e){
-        e.preventDefault(); // предотвращаем перезагрузку страницы
+        e.preventDefault(); // убирает перезагрузку страницы
     });
     
     var res_field = document.querySelector('.result_field');
