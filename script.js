@@ -1,13 +1,27 @@
 document.addEventListener('DOMContentLoaded', function(){
     var form = document.querySelector('.calc');
     form.addEventListener('submit', function(e){
-        e.preventDefault(); // убирает перезагрузку страницы
+        e.preventDefault(); // - перезагрузка страницы
     });
     
     var res_field = document.querySelector('.result_field');
     var btn_num = document.querySelectorAll('.btn-add');
     var btn_reset = document.querySelector('.btn-reset');
     var btn_eq = document.querySelector('.btn-eq');
+    const theme = document.querySelector('#theme-link');
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+        theme.href = savedTheme;
+    }
+    document.getElementById('theme-toggle').addEventListener('click', function(){
+        if (theme.getAttribute('href') == 'css/styles.css') {
+            theme.href = 'css/night-theme.css';
+            localStorage.setItem('theme', 'css/night-theme.css');
+        } else {
+            theme.href = 'css/styles.css';
+            localStorage.setItem('theme', 'css/styles.css');
+        }
+    });
     
     for (var i = 0; i < btn_num.length; i++) {
         btn_num[i].addEventListener('click', function(e){
