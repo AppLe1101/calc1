@@ -4,10 +4,15 @@ document.addEventListener('DOMContentLoaded', function(){
         e.preventDefault(); // - перезагрузка страницы
     });
     
+    const allBtn = document.querySelectorAll('.btn');
     var res_field = document.querySelector('.result_field');
     var btn_num = document.querySelectorAll('.btn-add');
     var btn_reset = document.querySelector('.btn-reset');
     var btn_eq = document.querySelector('.btn-eq');
+    var btn_mode_toggle = document.querySelector('.btn-mode-toggle');
+    const btn_adv = document.getElementById('btn_adv');
+    const history = document.getElementById('history');
+//смена темы
     const theme = document.querySelector('#theme-link');
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme) {
@@ -23,33 +28,83 @@ document.addEventListener('DOMContentLoaded', function(){
         }
     });
     
-    for (var i = 0; i < btn_num.length; i++) {
-        btn_num[i].addEventListener('click', function(e){
-            e.preventDefault();
-            res_field.value += this.innerHTML; 
-        });
+//меню
+    var btn_menu = document.getElementById('btn-menu');
+    btn_menu.addEventListener('click', () => {
+        const isOpen = history.style.display === 'none';
+        history.style.display = isOpen ? 'flex' : 'none';
+    });
+
+//скобки
+    let openBrackets = 0;
+
+    function addToExpression(value) {
+        if (value === '('){
+            openBrackets++; 
+            res_field.value += '(';
+
+            res_field.classList.add('open-bracket');
+        } else if (value === ')' && openBrackets > 0) {
+            openBrackets--;
+            res_field.value += ')';
+
+            if (openBrackets === 0) {
+                res_field.classList.remove('open-bracket');
+            }
+        } else if (value !== ')' || openBrackets > 0){
+            res_field.value += value;
+        }
     }
+//строка
+    btn_num.forEach(button =>  {
+        button.addEventListener('click', ()=>{
+            const value = button.dataset.value || button.innerText;
+            addToExpression(value);
+        });
+    });
+
+//переключатель режимов 
+    btn_mode_toggle.addEventListener('click', () => {
+        const isStandart = btn_adv.style.display === 'none';
+        btn_adv.style.display = isStandart ? 'flex' : 'none';
+
+        allBtn.forEach(button => {
+            button.classList.toggle('small-btn');
+        });
+    });
     
-    // Сброс поля результата
+// Сброс поля результата
     btn_reset.addEventListener('click', function(e){
         e.preventDefault();
         res_field.value = '';
+        openBrackets = 0;
+        res_field.classList.remove('open-bracket');
     });
     
-    // Вычисление результата
+// Вычисление результата
     btn_eq.addEventListener('click', function(e){
         e.preventDefault();
         try {
             let expression = res_field.value;
-            
 
-            expression = expression.replace(/\^/g, '**'); // возведения в степень
-            expression = expression.replace(/√(\d+(\.\d+)?)/g, 'Math.sqrt($1)'); // замена корня
-            
+            expression = expression.replace(/×/g, '*').replace(/÷/g, '/');
+            expression = expression.replace(/\^/g, '**'); // возведение в степень
+            expression = expression.replace(/√(\d+(\.\d+)?)/g, 'Math.sqrt($1)'); //  корнень
 
-            res_field.value = eval(expression);
+            result = eval(expression);
+            formattedResult = parseFloat(result.toFixed(3)).toString();
+            res_field.value = formattedResult;
+            openBrackets = 0;
+            res_field.classList.remove('open-bracket');
+            addToHistory(`${expression} = ${formattedResult}`);
         } catch (error) {
             res_field.value = 'Ошибка';
         }
     });
+    function addToHistory(entry) {
+        const historyItem = document.createElement('div');
+        historyItem.className = 'history-item';
+        historyItem.innerText = entry;
+        history.prepend(historyItem);
+    }
 });
