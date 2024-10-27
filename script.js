@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', function(){
     var btn_mode_toggle = document.querySelector('.btn-mode-toggle');
     const btn_adv = document.getElementById('btn_adv');
     const history = document.getElementById('history');
+    const history_items = document.getElementById('history-items');
 //смена темы
     const theme = document.querySelector('#theme-link');
     const savedTheme = localStorage.getItem('theme');
@@ -32,8 +33,11 @@ document.addEventListener('DOMContentLoaded', function(){
     var btn_menu = document.getElementById('btn-menu');
     btn_menu.addEventListener('click', () => {
         const isOpen = history.style.display === 'none';
-        history.style.display = isOpen ? 'flex' : 'none';
+        history.style.display = isOpen ? 'block' : 'none';
     });
+
+    document.querySelector('.hist-btn-clear').addEventListener('click', clearHistory);
+    document.querySelector('.hist-btn-close').addEventListener('click', closeHistory)
 
 //скобки
     let openBrackets = 0;
@@ -90,13 +94,21 @@ document.addEventListener('DOMContentLoaded', function(){
             expression = expression.replace(/×/g, '*').replace(/÷/g, '/');
             expression = expression.replace(/\^/g, '**'); // возведение в степень
             expression = expression.replace(/√(\d+(\.\d+)?)/g, 'Math.sqrt($1)'); //  корнень
+            expression = expression.replace(/(\d+)%/g, '($1 * 0.01)');
 
             result = eval(expression);
             formattedResult = parseFloat(result.toFixed(3)).toString();
             res_field.value = formattedResult;
             openBrackets = 0;
             res_field.classList.remove('open-bracket');
-            addToHistory(`${expression} = ${formattedResult}`);
+
+            let formattedExpression = expression
+                .replace(/\*/g, '×')
+                .replace(/\//g, '÷')
+                .replace(/\*\*/g, '^')
+                .replace(/Math\.sqrt\(([^)]+)\)/g, '√$1')
+                .replace(/\((\d+)\s*\*\s*0\.01\)/g, '$1%');
+            addToHistory(`${formattedExpression} = ${formattedResult}`);
         } catch (error) {
             res_field.value = 'Ошибка';
         }
@@ -105,6 +117,14 @@ document.addEventListener('DOMContentLoaded', function(){
         const historyItem = document.createElement('div');
         historyItem.className = 'history-item';
         historyItem.innerText = entry;
-        history.prepend(historyItem);
+        history_items.appendChild(historyItem);
+    }
+
+    function clearHistory(entry) {
+        const historyItem = document.getElementById('history-items')
+        historyItem.innerHTML = '';
+    }
+    function closeHistory(){
+        history.style.display = 'none';
     }
 });
