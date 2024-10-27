@@ -1,21 +1,23 @@
+@import url('https://fonts.googleapis.com/css2?family=Karla:ital,wght@0,200..800;1,200..800&display=swap');
 body{
     height: 100vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background-color: #342E37;
+    background-color: #171618;
     transition: 0.7s all;
 }
 *{
     box-sizing: border-box;  
     color: #fff; 
     overflow: hidden;
-    transition: 0.7s all;
+
+    font-family: "Karla", sans-serif;
 }
 .result_field{
     display: block;
-    background-color: #342E37;
+    background-color: #171618;
     position: relative;
     width: 100%;
     height: 60px;
@@ -40,7 +42,7 @@ body{
 .calc{
     display: flex;
     flex-wrap: wrap;
-    background-color: #342E37;
+    background-color: #171618;
     width: 256px;
     height: 375px;
     padding: 16px;
@@ -53,11 +55,11 @@ body{
     margin: 3px;
     width: 50px;
     height: 50px;
-    font-size: 16px;
+    font-size: 19px;
     transition: 0.7s all;
     opacity: 0.7;
     font-weight: 700;
-    background-color: #171717;
+    background-color: #101010;
     border: none;
     border-radius: 10px;
 }
@@ -69,9 +71,10 @@ body{
     transition: 0.7s all;
     opacity: 0.7;
     font-weight: 700;
-    background-color: #171717;
+    background-color: #101010;
     border: none;
     border-radius: 10px;
+    z-index: 1000;
 }
 .small-btn{
     margin: 3px;
@@ -81,7 +84,7 @@ body{
     transition: 0.7s all;
     opacity: 0.7;
     font-weight: 700;
-    background-color: #171717;
+    background-color: #101010;
     border: none;
     border-radius: 10px;
 }
@@ -137,7 +140,7 @@ body{
     top: 140px;
 }
 .history{
-    display: flex;
+    display: block;
     flex-direction: column;
     position: absolute;
     width: 30%;
@@ -145,23 +148,38 @@ body{
     transform: translateY(-10px);
     left: 0;
     border-radius: 20px;
-    background-color: #342E37;
+    background-color: #171618;
     box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
     transition: 0.7s all;
+    overflow-y: auto;
     z-index: 1000;
+}
+.history-header{
+    display: flex;
+    position: sticky;
+    top: 0;
+    justify-content: space-around;
+    padding: 10px 0 10px 0;
+    backdrop-filter: blur(5px);
+}
+.hist-btn{
+    cursor: pointer;
+    text-decoration: none;
+    color: #fca103;
+    font-size: 20px;
 }
 .history-item{
     display: flex;
     justify-content: center;
     align-items: center;
     width: 100%;
-    height: 30px;
-    font-size: 20px;
+    height: 70px;
+    font-size: 28px;
     font-weight: 700;
     margin-bottom: 5px;
     border-radius: 10px;
-    background-color: #342E37;
-    box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+    background-color: #171618;
+    box-shadow: 0 0 2px rgba(255, 255, 255, 0.1);
     transition: 0.7s all;
     z-index: 1001;
 }
@@ -175,4 +193,39 @@ body{
 }
 .footer{
     opacity: .2;
+}
+
+@media (max-width: 600px) {
+    .history{
+        display: block;
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        height: 60%;
+        overflow-y: auto;
+    }
+    .history-item{
+        height: 70px;
+    }
+    #theme-toggle{
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-85px);
+    }
+    .btn-git{
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+    .btn-menu{
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(35px);
+    }
+    .history-header{
+        display: flex;
+    }
 }
