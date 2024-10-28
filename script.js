@@ -13,6 +13,10 @@ document.addEventListener('DOMContentLoaded', function(){
     const btn_adv = document.getElementById('btn_adv');
     const history = document.getElementById('history');
     const history_items = document.getElementById('history-items');
+
+    let isResult = false;
+    let openBrackets = 0;
+
 //смена темы
     const theme = document.querySelector('#theme-link');
     const savedTheme = localStorage.getItem('theme');
@@ -40,9 +44,14 @@ document.addEventListener('DOMContentLoaded', function(){
     document.querySelector('.hist-btn-close').addEventListener('click', closeHistory)
 
 //скобки
-    let openBrackets = 0;
+    function addToExpression(value, isOperator = false) {
+        if (isResult) {
+            if (!isOperator) {
+                res_field.value = '';
+            }
+            isResult = false
+        }
 
-    function addToExpression(value) {
         if (value === '('){
             openBrackets++; 
             res_field.value += '(';
@@ -63,7 +72,8 @@ document.addEventListener('DOMContentLoaded', function(){
     btn_num.forEach(button =>  {
         button.addEventListener('click', ()=>{
             const value = button.dataset.value || button.innerText;
-            addToExpression(value);
+            const isOperator = /[+\-×÷^]/.test(value);
+            addToExpression(value, isOperator);
         });
     });
 
@@ -83,6 +93,7 @@ document.addEventListener('DOMContentLoaded', function(){
         res_field.value = '';
         openBrackets = 0;
         res_field.classList.remove('open-bracket');
+        isResult = false;
     });
     
 // Вычисление результата
@@ -96,9 +107,11 @@ document.addEventListener('DOMContentLoaded', function(){
             expression = expression.replace(/√(\d+(\.\d+)?)/g, 'Math.sqrt($1)'); //  корнень
             expression = expression.replace(/(\d+)%/g, '($1 * 0.01)');
 
-            result = eval(expression);
-            formattedResult = parseFloat(result.toFixed(3)).toString();
+            const result = eval(expression);
+            const formattedResult = parseFloat(result.toFixed(3)).toString();
             res_field.value = formattedResult;
+
+            isResult = true;
             openBrackets = 0;
             res_field.classList.remove('open-bracket');
 
