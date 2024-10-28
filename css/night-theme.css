@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Karla:ital,wght@0,200..800;1,200..800&display=swap');
 body{
     height: 100vh;
     display: flex;
@@ -227,4 +228,49 @@ body{
     .history-header{
         display: flex;
     }
+}
+@media (max-height: 570px) {
+
+    .calc{
+        width: 256px;
+        height: 300px;
+    }
+    .btn{
+        height: 37px;
+        font-size: 16px;
+    }
+    .small-btn{
+        height: 30px;
+        font-size: 16px;
+    }
+}
+@media (max-height: 490px) {
+
+    .btn-git{
+        top: 10px;
+    }
+    .btn-menu{
+        top: 10px;
+    }
+    #theme-toggle{
+        top: 10px;
+    }
+}
+@media (max-height: 470px) {
+    body{
+        justify-content: flex-end;
+    }
+    .calc{
+        width: 256px;
+        height: 300px;
+    }
+    .btn{
+        height: 37px;
+        font-size: 16px;
+    }
+    .small-btn{
+        height: 30px;
+        font-size: 16px;
+    }
+
 }
